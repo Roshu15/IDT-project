@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Classroom Controls</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="controls">
+    <header class="site-header">
+      <div class="header-content">
+        <h1 class="logo">Smart Classroom Automation</h1>
+        <nav class="main-nav">
+          <a href="home.html" class="nav-link">Home</a>
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <a href="login.html" class="nav-link">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-shell">
+        <section class="hero-panel">
+          <div class="hero-copy-block">
+            <p class="eyebrow">Manual Override</p>
+            <h2>Take control when you need to, then hand the room back to automation.</h2>
+            <p class="hero-copy">
+              Manual mode freezes the latest operator settings. Auto mode lets the agent resume
+              comfort and energy optimization using live sensor and weather signals.
+            </p>
+          </div>
+          <div class="hero-side">
+            <div class="status-chip" id="controlStatusChip">Loading current mode...</div>
+          </div>
+        </section>
+
+        <section class="controls-grid">
+          <article class="panel-card">
+            <div class="panel-head"><h3>Mode Switch</h3></div>
+            <div class="button-row">
+              <button id="autoModeButton">Enable Auto</button>
+              <button id="manualModeButton" class="ghost-button">Enable Manual</button>
+            </div>
+            <p id="controlModeMessage" class="panel-note">Current mode will appear here once the dashboard connects.</p>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-head"><h3>Manual Actuator Controls</h3></div>
+            <form id="manualControlForm" class="control-form">
+              <label>
+                Fan State
+                <select id="manualFanState">
+                  <option value="OFF">OFF</option>
+                  <option value="ON">ON</option>
+                </select>
+              </label>
+              <label>
+                Fan Speed
+                <select id="manualFanSpeed">
+                  <option value="LOW">LOW</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="HIGH">HIGH</option>
+                </select>
+              </label>
+              <label>
+                Light State
+                <select id="manualLightState">
+                  <option value="OFF">OFF</option>
+                  <option value="ON">ON</option>
+                </select>
+              </label>
+              <label>
+                Light Brightness
+                <input id="manualBrightness" type="range" min="0" max="100" value="60" />
+              </label>
+              <p class="panel-note">Selected brightness: <strong id="manualBrightnessValue">60%</strong></p>
+              <button type="submit">Apply Manual Settings</button>
+            </form>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Classroom Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body data-page="dashboard">
+    <header class="site-header">
+      <div class="header-content">
+        <h1 class="logo">Smart Classroom Automation</h1>
+        <nav class="main-nav">
+          <a href="home.html" class="nav-link">Home</a>
+          <a href="dashboard.html" class="nav-link active">Dashboard</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <a href="login.html" class="nav-link">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-shell">
+        <section class="hero-panel">
+          <div class="hero-copy-block">
+            <p class="eyebrow">Live Classroom Intelligence</p>
+            <h2>Production-style monitoring for a smart, adaptive, energy-aware classroom.</h2>
+            <p class="hero-copy">
+              Physical sensors, virtual sensing logic, weather context, and the decision engine work
+              together in real time to maintain comfort while reducing energy waste.
+            </p>
+          </div>
+          <div class="hero-side">
+            <div class="status-chip" id="systemStatus">Connecting...</div>
+            <div class="hero-mini-grid">
+              <div class="mini-stat">
+                <span>Mode</span>
+                <strong id="statusMode">--</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Cycle</span>
+                <strong id="statusCycle">--</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Energy</span>
+                <strong id="statusEnergy">--</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="sensor-grid">
+          <article class="sensor-card"><div class="sensor-icon">TM</div><div><p class="sensor-label">Temperature</p><h3 id="sensorTemperature">--</h3></div></article>
+          <article class="sensor-card"><div class="sensor-icon">HU</div><div><p class="sensor-label">Humidity</p><h3 id="sensorHumidity">--</h3></div></article>
+          <article class="sensor-card"><div class="sensor-icon">LX</div><div><p class="sensor-label">Light</p><h3 id="sensorLight">--</h3></div></article>
+          <article class="sensor-card"><div class="sensor-icon">MT</div><div><p class="sensor-label">Motion</p><h3 id="sensorMotion">--</h3></div></article>
+        </section>
+
+        <section class="dashboard-grid simple-dashboard-grid">
+          <article class="panel-card">
+            <div class="panel-head"><h3>Classroom Status</h3></div>
+            <div class="status-row"><span>Occupancy</span><strong id="virtualOccupancy">--</strong></div>
+            <div class="status-row"><span>Comfort Index</span><strong id="virtualComfort">--</strong></div>
+            <div class="status-row"><span>Fan Status</span><strong id="fanState">--</strong></div>
+            <div class="status-row"><span>Light Status</span><strong id="lightState">--</strong></div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-head"><h3>Weather Merge</h3></div>
+            <div class="status-row"><span>Provider</span><strong id="weatherProvider">--</strong></div>
+            <div class="status-row"><span>Outside Temp</span><strong id="weatherTemperature">--</strong></div>
+            <div class="status-row"><span>Outside Humidity</span><strong id="weatherHumidity">--</strong></div>
+            <div class="status-row"><span>Condition</span><strong id="weatherCondition">--</strong></div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-head"><h3>Actuators</h3></div>
+            <div class="status-row"><span>Fan Speed</span><strong id="fanSpeed">--</strong></div>
+            <div class="status-row"><span>Brightness</span><strong id="lightBrightness">--</strong></div>
+            <div class="status-row"><span>Energy Consumption</span><strong id="virtualEnergy">--</strong></div>
+            <div class="status-row"><span>Required Brightness</span><strong id="virtualBrightness">--</strong></div>
+          </article>
+        </section>
+
+        <section class="panel-card big-decision-box">
+          <div class="panel-head">
+            <h3>Decision Summary</h3>
+            <span class="panel-note">Human-readable action output</span>
+          </div>
+          <p id="decisionNarrative" class="decision-narrative large-decision">Waiting for live updates...</p>
+        </section>
+
+        <section class="chart-grid">
+          <article class="panel-card chart-card">
+            <div class="panel-head">
+              <h3>Temperature Trend</h3>
+              <span class="panel-note">Live classroom temperature across recent cycles</span>
+            </div>
+            <canvas id="temperatureChart"></canvas>
+          </article>
+
+          <article class="panel-card chart-card">
+            <div class="panel-head">
+              <h3>Energy Consumption</h3>
+              <span class="panel-note">Cumulative energy profile over time</span>
+            </div>
+            <canvas id="energyChart"></canvas>
+          </article>
+        </section>
+
+        <section class="thinking-grid">
+          <article class="panel-card decision-card">
+            <div class="panel-head">
+              <h3>System Decisions</h3>
+              <span class="panel-note">Transparent AI-style reasoning</span>
+            </div>
+            <div class="score-strip">
+              <div class="score-pill"><span>Cooling</span><strong id="scoreCooling">--</strong></div>
+              <div class="score-pill"><span>Lighting</span><strong id="scoreLighting">--</strong></div>
+              <div class="score-pill"><span>Eco</span><strong id="scoreEco">--</strong></div>
+            </div>
+            <ul id="decisionReasons" class="reason-list"></ul>
+          </article>
+
+          <article class="panel-card history-card">
+            <div class="panel-head">
+              <h3>Recent Thinking Log</h3>
+              <span class="panel-note">Natural-language decision history</span>
+            </div>
+            <ul id="decisionHistory" class="history-list"></ul>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

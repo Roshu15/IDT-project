@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In | Smart Classroom Automation</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="login">
+    <header class="site-header">
+      <div class="header-content">
+        <h1 class="logo">Smart Classroom Automation</h1>
+        <nav class="main-nav">
+          <a href="home.html" class="nav-link">Home</a>
+          <a href="dashboard.html" class="nav-link">Dashboard</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <a href="login.html" class="nav-link active">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="page-shell auth-shell">
+        <section class="panel-card auth-card">
+          <p class="eyebrow">Operator Access</p>
+          <h2>Sign in to continue to the classroom dashboard.</h2>
+          <p class="hero-copy">This is a lightweight demo login with basic validation for presentation use.</p>
+          <form class="login-form" id="loginForm">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="teacher@classroom.ai" required />
+
+            <label for="password">Password</label>
+            <input type="password" id="password" minlength="6" placeholder="Enter password" required />
+
+            <p id="loginFeedback" class="form-feedback"></p>
+            <button type="submit">Sign In</button>
+          </form>
+          <p class="panel-note">Need access for a project demo? <a href="contact.html">Contact the developer</a>.</p>
+        </section>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
