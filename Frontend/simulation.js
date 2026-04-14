@@ -141,6 +141,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Live Weather Logic
+  const liveWeatherBtn = document.getElementById('liveWeatherBtn');
+  const liveWeatherTemp = document.getElementById('liveWeatherTemp');
+  
+  if (liveWeatherBtn) {
+    async function fetchWeather(lat = 51.5074, lon = -0.1278) { // Default London
+      try {
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,is_day`);
+        const data = await response.json();
+        const temp = data.current.temperature_2m;
+        const isDay = data.current.is_day;
+        
+        liveWeatherTemp.textContent = `${temp} °C`;
+        
+        // Register the live setting so the timeBtn logic works automatically
+        timePresets['live'] = {
+          light: isDay ? 800 : 50,
+          temp: temp
+        };
+      } catch (err) {
+        liveWeatherTemp.textContent = "Error";
+        console.error("Weather fetch failed:", err);
+      }
+    }
+
+    // Try to get actual location, fallback to default if blocked or unavailable
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+        (err) => fetchWeather() // user denied/error
+      );
+    } else {
+      fetchWeather();
+    }
+  }
+
   // Scenario Logic
   scenarioCards.forEach(card => {
     card.addEventListener('click', (e) => {
