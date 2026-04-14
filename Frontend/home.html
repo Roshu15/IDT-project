@@ -3,72 +3,95 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Classroom Automation</title>
+    <title>Smart Classroom Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body data-page="home">
     <header class="site-header">
       <div class="header-content">
-        <h1 class="logo">Smart Classroom Automation</h1>
+        <a href="home.html" class="logo">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Classroom AI
+        </a>
         <nav class="main-nav">
           <a href="home.html" class="nav-link active">Home</a>
           <a href="dashboard.html" class="nav-link">Dashboard</a>
-          <a href="contact.html" class="nav-link">Contact</a>
-          <a href="login.html" class="nav-link">Login</a>
+          <a href="controls.html" class="nav-link">contact</a>
+          <a href="contact.html" class="nav-link">log in</a>
         </nav>
       </div>
     </header>
 
     <main class="page-content">
       <div class="page-shell">
-        <section class="hero-panel home-hero">
+        <section class="hero-panel fade-in">
           <div class="hero-copy-block">
-            <p class="eyebrow">Smart Classroom</p>
-            <h2>Make every classroom more comfortable, bright, and easy to manage.</h2>
+            <p class="eyebrow">Facility Management Platform</p>
+            <h2>Intelligent infrastructure for modern classrooms.</h2>
             <p class="hero-copy">
-              Our smart system helps control lights and fans automatically, saves power, and keeps the room pleasant for students and teachers.
+              A comprehensive platform that seamlessly manages HVAC and lighting based on real-time classroom occupancy and environmental conditions, driving sustainability without sacrificing comfort.
             </p>
             <div class="button-row">
-              <a href="dashboard.html" class="cta-button">Get Started</a>
+              <a href="dashboard.html" class="cta-button">Open Dashboard</a>
               <a href="login.html" class="cta-button ghost-button">Sign In</a>
             </div>
           </div>
           <div class="hero-side">
             <div class="mini-stat large">
-              <span>Why People Like It</span>
-              <strong>Smart control without extra effort</strong>
-              <p>The system watches the room, understands what is needed, and adjusts devices in real time.</p>
+              <span>Operational Efficiency</span>
+              <strong>Automated Climate & Lighting</strong>
+              <p>The system autonomously regulates building subsystems to reduce energy waste while maintaining precise environmental standards for lectures or exams.</p>
             </div>
           </div>
         </section>
 
         <section class="feature-grid">
           <article class="panel-card feature-card">
-            <div class="sensor-icon">TM</div>
-            <h3>Live Room Updates</h3>
-            <p>See temperature, humidity, light, and motion in one simple view.</p>
+            <div class="sensor-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9m-9 9a9 9 0 0 1 9-9"/></svg>
+            </div>
+            <h3>Real-time Telemetry</h3>
+            <p>Monitor temperature, ambient light, and passive infrared motion detection inputs through a unified dashboard interface.</p>
           </article>
           <article class="panel-card feature-card">
-            <div class="sensor-icon">VS</div>
-            <h3>Smarter Energy Use</h3>
-            <p>Use power only when needed and avoid wasting energy in an empty room.</p>
+            <div class="sensor-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3>Energy Optimization</h3>
+            <p>Algorithmically prevent energy waste by dynamically disengaging relays when a room is vacant or meets adequate natural conditions.</p>
           </article>
           <article class="panel-card feature-card">
-            <div class="sensor-icon">AI</div>
-            <h3>Easy to Understand</h3>
-            <p>Get clear messages that explain what the system is doing and why.</p>
+            <div class="sensor-icon">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            </div>
+            <h3>Centralized Control</h3>
+            <p>Retain manual override capabilities or let the simulation dictate state changes based on configurable threshold parameters.</p>
           </article>
         </section>
 
         <section class="info-banner">
           <div>
-            <p class="eyebrow">Built for Real Use</p>
-            <h3>A clean dashboard, simple controls, and a smooth experience from home page to live monitoring.</h3>
+            <p class="eyebrow">Simulation Ready</p>
+            <h3>Evaluate system performance risk-free using our interactive virtual environment.</h3>
           </div>
-          <a href="contact.html" class="cta-button">Contact Us</a>
+          <a href="dashboard.html" class="cta-button">Try Simulator</a>
         </section>
       </div>
     </main>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-branding">
+          &copy; 2026 Smart Classroom Systems. All rights reserved.
+        </div>
+        <div class="footer-links">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="controls.html">Documentation</a>
+          <a href="contact.html">Support</a>
+        </div>
+      </div>
+    </footer>
 
     <script src="script.js"></script>
   </body>
