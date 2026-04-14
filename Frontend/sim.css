@@ -1,0 +1,356 @@
+:root {
+  --sim-bg: transparent;
+  --sim-surface: rgba(14, 27, 39, 0.9);
+  --sim-text: #eef7ff;
+  --sim-muted: #9db4c5;
+  --sim-border: rgba(255, 255, 255, 0.08);
+  --sim-primary: #5ec8ff;
+  --sim-primary-light: rgba(94, 200, 255, 0.14);
+  --sim-green: #51d3a7;
+  --sim-green-light: rgba(81, 211, 167, 0.14);
+  --sim-card-bg: rgba(18, 36, 51, 0.98);
+  --sim-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+}
+
+.sim-page .sim-dashboard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.sim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.header-titles h1 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.header-titles p {
+  margin: 0;
+  color: var(--sim-muted);
+  font-size: 0.95rem;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sim-green-light);
+  color: #248a3d;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-indicator .dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--sim-green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.2);
+}
+
+.sim-section {
+  margin-bottom: 28px;
+}
+
+.sim-section h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sim-muted);
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sim-btn {
+  background: var(--sim-surface);
+  border: 1px solid var(--sim-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--sim-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sim-btn:hover {
+  background: #fcfcfc;
+}
+
+.sim-btn small {
+  color: var(--sim-muted);
+  font-size: 0.85em;
+}
+
+.sim-btn.active {
+  background: var(--sim-primary-light);
+  border-color: var(--sim-primary);
+  color: var(--sim-primary);
+  font-weight: 500;
+}
+
+.sim-btn.active small {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.card-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.scenario-card {
+  background: var(--sim-surface);
+  border: 1px solid var(--sim-border);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.scenario-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sim-shadow);
+}
+
+.scenario-card.active {
+  background: var(--sim-primary-light);
+  border-color: var(--sim-primary);
+}
+
+.scenario-card strong {
+  font-size: 0.95rem;
+  color: var(--sim-text);
+  font-weight: 600;
+}
+
+.scenario-card.active strong {
+  color: var(--sim-primary);
+}
+
+.scenario-card span {
+  font-size: 0.85rem;
+  color: var(--sim-muted);
+}
+
+.scenario-card.active span {
+  color: var(--sim-primary);
+  opacity: 0.8;
+}
+
+.sim-card {
+  background: var(--sim-card-bg);
+  border: 1px solid var(--sim-border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.sim-card.no-hover {
+  cursor: default;
+}
+
+.inputs-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.slider-label {
+  width: 160px;
+  font-size: 0.95rem;
+  color: var(--sim-text);
+}
+
+.slider-value {
+  width: 80px;
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-feature-settings: "tnum";
+}
+
+/* Custom Range Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+  flex-grow: 1;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--sim-primary);
+  cursor: pointer;
+  margin-top: -8px;
+  box-shadow: 0 2px 5px rgba(0,102,204,0.3);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: #d1d1d6;
+  border-radius: 3px;
+  position: relative;
+}
+
+/* The filled part of the track */
+.slider-row {
+  position: relative;
+}
+input[type=range] {
+  z-index: 2;
+}
+.track-fill {
+  position: absolute;
+  height: 6px;
+  background: var(--sim-primary);
+  border-radius: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 176px; /* Offset label width */
+  pointer-events: none;
+  z-index: 1;
+}
+
+.relay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.relay-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--sim-surface);
+}
+
+.relay-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.relay-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.light-icon {
+  background-color: var(--sim-green);
+  box-shadow: 0 0 0 3px var(--sim-green-light);
+}
+
+.relay-item.off .light-icon {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+.fan-icon {
+  color: var(--sim-muted);
+  transition: transform 1s linear;
+}
+
+.relay-item.on .fan-icon {
+  animation: spin 2s linear infinite;
+  color: var(--sim-text);
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.relay-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.relay-text strong {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.relay-text span {
+  font-size: 0.85rem;
+  color: var(--sim-muted);
+}
+
+.relay-state {
+  background: var(--sim-green-light);
+  color: #248a3d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.relay-item.off .relay-state {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--sim-muted);
+}
+
+.bottom-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.metric-card {
+  background: var(--sim-card-bg);
+  border: 1px solid var(--sim-border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-card strong {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.metric-card span {
+  font-size: 0.85rem;
+  color: var(--sim-muted);
+}

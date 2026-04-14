@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Classroom Dashboard</title>
+    <title>Smart Classroom Controller</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="sim.css" />
   </head>
-  <body data-page="dashboard">
+  <body data-page="dashboard" class="sim-page">
     <header class="site-header">
       <div class="header-content">
         <h1 class="logo">Smart Classroom Automation</h1>
@@ -20,120 +20,136 @@
       </div>
     </header>
 
-    <main class="page-content">
-      <div class="page-shell">
-        <section class="hero-panel">
-          <div class="hero-copy-block">
-            <p class="eyebrow">Live Classroom Intelligence</p>
-            <h2>Production-style monitoring for a smart, adaptive, energy-aware classroom.</h2>
-            <p class="hero-copy">
-              Physical sensors, virtual sensing logic, weather context, and the decision engine work
-              together in real time to maintain comfort while reducing energy waste.
-            </p>
+    <div class="page-content">
+      <div class="sim-dashboard">
+      <header class="sim-header">
+        <div class="header-titles">
+          <h1>Smart Classroom Controller</h1>
+          <p>Virtual simulation — no sensors, no hardware required</p>
+        </div>
+        <div class="status-indicator">
+          <span class="dot"></span> Running
+        </div>
+      </header>
+
+      <section class="sim-section time-of-day">
+        <h3>TIME OF DAY</h3>
+        <div class="btn-group" id="timeOfDayGroup">
+          <button class="sim-btn" data-time="dawn">Dawn <small>5–7 AM</small></button>
+          <button class="sim-btn active" data-time="morning">Morning <small>8–12</small></button>
+          <button class="sim-btn" data-time="noon">Noon <small>12–2 PM</small></button>
+          <button class="sim-btn" data-time="afternoon">Afternoon <small>2–5 PM</small></button>
+          <button class="sim-btn" data-time="evening">Evening <small>5–8 PM</small></button>
+          <button class="sim-btn" data-time="night">Night <small>after 8</small></button>
+        </div>
+      </section>
+
+      <section class="sim-section scenario">
+        <h3>CLASSROOM SCENARIO</h3>
+        <div class="card-group" id="scenarioGroup">
+          <button class="scenario-card active" data-scenario="session">
+            <strong>Class in session</strong>
+            <span>30 students</span>
+          </button>
+          <button class="scenario-card" data-scenario="empty">
+            <strong>Room empty</strong>
+            <span>0 students</span>
+          </button>
+          <button class="scenario-card" data-scenario="exam">
+            <strong>Exam mode</strong>
+            <span>Quiet, full</span>
+          </button>
+          <button class="scenario-card" data-scenario="partial">
+            <strong>Partially full</strong>
+            <span>~10 students</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="sim-section inputs">
+        <h3>VIRTUAL SENSOR INPUTS</h3>
+        <div class="sim-card no-hover inputs-card">
+          <div class="slider-row">
+            <span class="slider-label">Temperature (DHT11)</span>
+            <input type="range" id="tempSlider" min="15" max="40" value="28" step="0.5" />
+            <span class="slider-value" id="tempValue">28 °C</span>
           </div>
-          <div class="hero-side">
-            <div class="status-chip" id="systemStatus">Connecting...</div>
-            <div class="hero-mini-grid">
-              <div class="mini-stat">
-                <span>Mode</span>
-                <strong id="statusMode">--</strong>
-              </div>
-              <div class="mini-stat">
-                <span>Cycle</span>
-                <strong id="statusCycle">--</strong>
-              </div>
-              <div class="mini-stat">
-                <span>Energy</span>
-                <strong id="statusEnergy">--</strong>
-              </div>
-            </div>
+          <div class="slider-row">
+            <span class="slider-label">Ambient light (LDR)</span>
+            <input type="range" id="lightSlider" min="0" max="1000" value="420" step="5" />
+            <span class="slider-value" id="lightValue">420 lx</span>
           </div>
-        </section>
-
-        <section class="sensor-grid">
-          <article class="sensor-card"><div class="sensor-icon">TM</div><div><p class="sensor-label">Temperature</p><h3 id="sensorTemperature">--</h3></div></article>
-          <article class="sensor-card"><div class="sensor-icon">HU</div><div><p class="sensor-label">Humidity</p><h3 id="sensorHumidity">--</h3></div></article>
-          <article class="sensor-card"><div class="sensor-icon">LX</div><div><p class="sensor-label">Light</p><h3 id="sensorLight">--</h3></div></article>
-          <article class="sensor-card"><div class="sensor-icon">MT</div><div><p class="sensor-label">Motion</p><h3 id="sensorMotion">--</h3></div></article>
-        </section>
-
-        <section class="dashboard-grid simple-dashboard-grid">
-          <article class="panel-card">
-            <div class="panel-head"><h3>Classroom Status</h3></div>
-            <div class="status-row"><span>Occupancy</span><strong id="virtualOccupancy">--</strong></div>
-            <div class="status-row"><span>Comfort Index</span><strong id="virtualComfort">--</strong></div>
-            <div class="status-row"><span>Fan Status</span><strong id="fanState">--</strong></div>
-            <div class="status-row"><span>Light Status</span><strong id="lightState">--</strong></div>
-          </article>
-
-          <article class="panel-card">
-            <div class="panel-head"><h3>Weather Merge</h3></div>
-            <div class="status-row"><span>Provider</span><strong id="weatherProvider">--</strong></div>
-            <div class="status-row"><span>Outside Temp</span><strong id="weatherTemperature">--</strong></div>
-            <div class="status-row"><span>Outside Humidity</span><strong id="weatherHumidity">--</strong></div>
-            <div class="status-row"><span>Condition</span><strong id="weatherCondition">--</strong></div>
-          </article>
-
-          <article class="panel-card">
-            <div class="panel-head"><h3>Actuators</h3></div>
-            <div class="status-row"><span>Fan Speed</span><strong id="fanSpeed">--</strong></div>
-            <div class="status-row"><span>Brightness</span><strong id="lightBrightness">--</strong></div>
-            <div class="status-row"><span>Energy Consumption</span><strong id="virtualEnergy">--</strong></div>
-            <div class="status-row"><span>Required Brightness</span><strong id="virtualBrightness">--</strong></div>
-          </article>
-        </section>
-
-        <section class="panel-card big-decision-box">
-          <div class="panel-head">
-            <h3>Decision Summary</h3>
-            <span class="panel-note">Human-readable action output</span>
+          <div class="slider-row">
+            <span class="slider-label">Motion detected (PIR)</span>
+            <input type="range" id="motionSlider" min="0" max="1" value="1" step="1" />
+            <span class="slider-value" id="motionValue">Yes</span>
           </div>
-          <p id="decisionNarrative" class="decision-narrative large-decision">Waiting for live updates...</p>
-        </section>
+        </div>
+      </section>
 
-        <section class="chart-grid">
-          <article class="panel-card chart-card">
-            <div class="panel-head">
-              <h3>Temperature Trend</h3>
-              <span class="panel-note">Live classroom temperature across recent cycles</span>
+      <section class="sim-section relays">
+        <h3>RELAY OUTPUT — DEVICE STATES</h3>
+        <div class="relay-list">
+          <div class="sim-card no-hover relay-item">
+            <div class="relay-info">
+              <span class="relay-icon light-icon" id="icon-l1"></span>
+              <div class="relay-text">
+                <strong>Light Bank 1</strong>
+                <span>Front rows — Relay CH1</span>
+              </div>
             </div>
-            <canvas id="temperatureChart"></canvas>
-          </article>
+            <div class="relay-state" id="state-l1">ON</div>
+          </div>
+          <div class="sim-card no-hover relay-item">
+            <div class="relay-info">
+              <span class="relay-icon light-icon" id="icon-l2"></span>
+              <div class="relay-text">
+                <strong>Light Bank 2</strong>
+                <span>Rear rows — Relay CH2</span>
+              </div>
+            </div>
+            <div class="relay-state" id="state-l2">ON</div>
+          </div>
+          <div class="sim-card no-hover relay-item">
+            <div class="relay-info">
+              <svg class="relay-icon fan-icon" id="icon-f1" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0 4c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z" opacity="0.4"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+              <div class="relay-text">
+                <strong>Ceiling Fan 1</strong>
+                <span>Left side — Relay CH3</span>
+              </div>
+            </div>
+            <div class="relay-state" id="state-f1">ON</div>
+          </div>
+          <div class="sim-card no-hover relay-item">
+            <div class="relay-info">
+              <svg class="relay-icon fan-icon" id="icon-f2" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0 4c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z" opacity="0.4"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+              <div class="relay-text">
+                <strong>Ceiling Fan 2</strong>
+                <span>Right side — Relay CH4</span>
+              </div>
+            </div>
+            <div class="relay-state" id="state-f2">ON</div>
+          </div>
+        </div>
+      </section>
 
-          <article class="panel-card chart-card">
-            <div class="panel-head">
-              <h3>Energy Consumption</h3>
-              <span class="panel-note">Cumulative energy profile over time</span>
-            </div>
-            <canvas id="energyChart"></canvas>
-          </article>
-        </section>
+      <section class="sim-section bottom-metrics">
+        <div class="metric-card">
+          <strong id="activeDevicesValue">4/4</strong>
+          <span>Active devices</span>
+        </div>
+        <div class="metric-card">
+          <strong id="kwhSavedValue">0.00</strong>
+          <span>kWh saved (est.)</span>
+        </div>
+        <div class="metric-card">
+          <strong id="simRuntimeValue">00:10</strong>
+          <span>Sim runtime</span>
+        </div>
+      </section>
+    </div>
+    </div>
 
-        <section class="thinking-grid">
-          <article class="panel-card decision-card">
-            <div class="panel-head">
-              <h3>System Decisions</h3>
-              <span class="panel-note">Transparent AI-style reasoning</span>
-            </div>
-            <div class="score-strip">
-              <div class="score-pill"><span>Cooling</span><strong id="scoreCooling">--</strong></div>
-              <div class="score-pill"><span>Lighting</span><strong id="scoreLighting">--</strong></div>
-              <div class="score-pill"><span>Eco</span><strong id="scoreEco">--</strong></div>
-            </div>
-            <ul id="decisionReasons" class="reason-list"></ul>
-          </article>
-
-          <article class="panel-card history-card">
-            <div class="panel-head">
-              <h3>Recent Thinking Log</h3>
-              <span class="panel-note">Natural-language decision history</span>
-            </div>
-            <ul id="decisionHistory" class="history-list"></ul>
-          </article>
-        </section>
-      </div>
-    </main>
-
-    <script src="script.js"></script>
+    <script src="simulation.js"></script>
   </body>
 </html>
