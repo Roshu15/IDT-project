@@ -123,7 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
     noon: { light: 900, temp: 28 },
     afternoon: { light: 450, temp: 26 },
     evening: { light: 120, temp: 23 },
-    night: { light: 0, temp: 19 }
+    night: { light: 0, temp: 19 },
+    live: { light: 600, temp: 22 }
   };
 
   timeBtns.forEach(btn => {
@@ -164,6 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
         liveWeatherTemp.textContent = "22 °C"; // Fallback gracefully instead of Error
         timePresets['live'] = { light: 600, temp: 22 };
         console.error("Weather fetch failed:", err);
+      }
+      
+      if (liveWeatherBtn.classList.contains('active')) {
+        lightSlider.value = timePresets['live'].light;
+        tempSlider.value = timePresets['live'].temp;
+        updateSliderValues();
       }
     }
 
