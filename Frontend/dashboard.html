@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Classroom Controller</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="sim.css" />
   </head>
@@ -22,136 +29,118 @@
 
     <div class="page-content">
       <div class="sim-dashboard">
-      <header class="sim-header">
-        <div class="header-titles">
-          <h1>Smart Classroom Controller</h1>
-          <p>Virtual simulation — no sensors, no hardware required</p>
-        </div>
-        <div class="status-indicator">
-          <span class="dot"></span> Running
-        </div>
-      </header>
-
-      <section class="sim-section time-of-day">
-        <h3>TIME OF DAY</h3>
-        <div class="btn-group" id="timeOfDayGroup">
-          <button class="sim-btn" data-time="dawn">Dawn <small>5–7 AM</small></button>
-          <button class="sim-btn active" data-time="morning">Morning <small>8–12</small></button>
-          <button class="sim-btn" data-time="noon">Noon <small>12–2 PM</small></button>
-          <button class="sim-btn" data-time="afternoon">Afternoon <small>2–5 PM</small></button>
-          <button class="sim-btn" data-time="evening">Evening <small>5–8 PM</small></button>
-          <button class="sim-btn" data-time="night">Night <small>after 8</small></button>
-          <button class="sim-btn" data-time="live" id="liveWeatherBtn" style="margin-left: auto;">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-            Current Location <small id="liveWeatherTemp">-- °C</small>
-          </button>
-        </div>
-      </section>
-
-      <section class="sim-section scenario">
-        <h3>CLASSROOM SCENARIO</h3>
-        <div class="card-group" id="scenarioGroup">
-          <button class="scenario-card active" data-scenario="session">
-            <strong>Class in session</strong>
-            <span>30 students</span>
-          </button>
-          <button class="scenario-card" data-scenario="empty">
-            <strong>Room empty</strong>
-            <span>0 students</span>
-          </button>
-          <button class="scenario-card" data-scenario="exam">
-            <strong>Exam mode</strong>
-            <span>Quiet, full</span>
-          </button>
-          <button class="scenario-card" data-scenario="partial">
-            <strong>Partially full</strong>
-            <span>~10 students</span>
-          </button>
-        </div>
-      </section>
-
-      <section class="sim-section inputs">
-        <h3>VIRTUAL SENSOR INPUTS</h3>
-        <div class="sim-card no-hover inputs-card">
-          <div class="slider-row">
-            <span class="slider-label">Temperature (DHT11)</span>
-            <input type="range" id="tempSlider" min="15" max="40" value="28" step="0.5" />
-            <span class="slider-value" id="tempValue">28 °C</span>
+        <!-- New Top Header -->
+        <header class="sim-header glass-panel">
+          <div class="header-titles">
+            <h1>Smart Classroom System</h1>
+            <p>Live Dashboard Overview</p>
           </div>
-          <div class="slider-row">
-            <span class="slider-label">Ambient light (LDR)</span>
-            <input type="range" id="lightSlider" min="0" max="1000" value="420" step="5" />
-            <span class="slider-value" id="lightValue">420 lx</span>
-          </div>
-          <div class="slider-row">
-            <span class="slider-label">Motion detected (PIR)</span>
-            <input type="range" id="motionSlider" min="0" max="1" value="1" step="1" />
-            <span class="slider-value" id="motionValue">Yes</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="sim-section relays">
-        <h3>RELAY OUTPUT — DEVICE STATES</h3>
-        <div class="relay-list">
-          <div class="sim-card no-hover relay-item">
-            <div class="relay-info">
-              <span class="relay-icon light-icon" id="icon-l1"></span>
-              <div class="relay-text">
-                <strong>Light Bank 1</strong>
-                <span>Front rows — Relay CH1</span>
-              </div>
+          <div class="header-metrics">
+            <div class="metric-pill">
+              <span class="pill-label">Temp</span>
+              <strong id="headerTempValue">-- °C</strong>
             </div>
-            <div class="relay-state" id="state-l1">ON</div>
-          </div>
-          <div class="sim-card no-hover relay-item">
-            <div class="relay-info">
-              <span class="relay-icon light-icon" id="icon-l2"></span>
-              <div class="relay-text">
-                <strong>Light Bank 2</strong>
-                <span>Rear rows — Relay CH2</span>
-              </div>
+            <div class="metric-pill">
+              <span class="pill-label">Active Devices</span>
+              <strong id="headerActiveDevices">0/18</strong>
             </div>
-            <div class="relay-state" id="state-l2">ON</div>
           </div>
-          <div class="sim-card no-hover relay-item">
-            <div class="relay-info">
-              <svg class="relay-icon fan-icon" id="icon-f1" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0 4c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z" opacity="0.4"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-              <div class="relay-text">
-                <strong>Ceiling Fan 1</strong>
-                <span>Left side — Relay CH3</span>
-              </div>
-            </div>
-            <div class="relay-state" id="state-f1">ON</div>
-          </div>
-          <div class="sim-card no-hover relay-item">
-            <div class="relay-info">
-              <svg class="relay-icon fan-icon" id="icon-f2" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.65 0 3-1.35 3-3s-1.35-3-3-3-3 1.35-3 3 1.35 3 3 3zm0 4c-3.31 0-6 2.69-6 6h12c0-3.31-2.69-6-6-6z" opacity="0.4"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-              <div class="relay-text">
-                <strong>Ceiling Fan 2</strong>
-                <span>Right side — Relay CH4</span>
-              </div>
-            </div>
-            <div class="relay-state" id="state-f2">ON</div>
-          </div>
-        </div>
-      </section>
+        </header>
 
-      <section class="sim-section bottom-metrics">
-        <div class="metric-card">
-          <strong id="activeDevicesValue">4/4</strong>
-          <span>Active devices</span>
-        </div>
-        <div class="metric-card">
-          <strong id="kwhSavedValue">0.00</strong>
-          <span>kWh saved (est.)</span>
-        </div>
-        <div class="metric-card">
-          <strong id="simRuntimeValue">00:10</strong>
-          <span>Sim runtime</span>
-        </div>
-      </section>
-    </div>
+        <!-- Main Sections -->
+        <div class="dashboard-grid-layout">
+          
+          <div class="left-column">
+            <!-- Live Classroom Status -->
+            <section class="sim-section status-section glass-panel">
+              <h3>Live Classroom Status</h3>
+              
+              <div class="subsection">
+                <h4>Time & Weather Preset</h4>
+                <div class="btn-group" id="timeOfDayGroup">
+                  <button class="sim-btn" data-time="dawn">Dawn</button>
+                  <button class="sim-btn active" data-time="morning">Morning</button>
+                  <button class="sim-btn" data-time="noon">Noon</button>
+                  <button class="sim-btn" data-time="afternoon">Afternoon</button>
+                  <button class="sim-btn" data-time="evening">Evening</button>
+                  <button class="sim-btn" data-time="night">Night</button>
+                  <button class="sim-btn live-btn" data-time="live" id="liveWeatherBtn">
+                    Live <span id="liveWeatherTemp">--°</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h4>Room Scenario</h4>
+                <div class="card-group" id="scenarioGroup">
+                  <button class="scenario-card active" data-scenario="session">Class</button>
+                  <button class="scenario-card" data-scenario="empty">Empty</button>
+                  <button class="scenario-card" data-scenario="exam">Exam</button>
+                  <button class="scenario-card" data-scenario="partial">Partial</button>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h4>Sensor Inputs</h4>
+                <div class="inputs-card">
+                  <div class="slider-row">
+                    <div class="slider-label-group">
+                      <span class="slider-label">Temperature</span>
+                      <span class="slider-value" id="tempValue">28 °C</span>
+                    </div>
+                    <input type="range" id="tempSlider" min="15" max="40" value="28" step="0.5" />
+                  </div>
+                  <div class="slider-row">
+                    <div class="slider-label-group">
+                      <span class="slider-label">Ambient Light</span>
+                      <span class="slider-value" id="lightValue">420 lx</span>
+                    </div>
+                    <input type="range" id="lightSlider" min="0" max="1000" value="420" step="5" />
+                  </div>
+                  <div class="slider-row">
+                    <div class="slider-label-group">
+                      <span class="slider-label">Motion Detected</span>
+                      <span class="slider-value" id="motionValue">Yes</span>
+                    </div>
+                    <input type="range" id="motionSlider" min="0" max="1" value="1" step="1" />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="right-column">
+            <!-- Device Control Panel -->
+            <section class="sim-section devices-section glass-panel">
+              <h3>Device Control Panel</h3>
+              <div class="devices-grid" id="devicesContainer">
+                <!-- Devices injected by JS -->
+              </div>
+            </section>
+
+            <!-- Energy Analytics -->
+            <section class="sim-section energy-section glass-panel">
+              <h3>Energy Analytics</h3>
+              
+              <div class="energy-metrics-row">
+                <div class="metric-card metric-runtime">
+                  <span class="label">Sim Runtime</span>
+                  <strong id="simRuntimeValue" class="value">00:00</strong>
+                </div>
+                <div class="metric-card metric-saved">
+                  <span class="label">kWh Saved (est.)</span>
+                  <strong id="kwhSavedValue" class="value">0.00</strong>
+                </div>
+              </div>
+
+              <div class="chart-container">
+                <canvas id="energyChart"></canvas>
+              </div>
+            </section>
+          </div>
+
+        </div> <!-- grid layout end -->
+      </div>
     </div>
 
     <script src="simulation.js"></script>
