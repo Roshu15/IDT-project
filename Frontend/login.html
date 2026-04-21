@@ -3,42 +3,110 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign In | Smart Classroom Automation</title>
+    <title>Login | Smart Classroom Automation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body data-page="login">
+    <div class="page-bg"></div>
+
     <header class="site-header">
       <div class="header-content">
-        <h1 class="logo">Smart Classroom Automation</h1>
+        <a href="home.html" class="logo">
+          <span class="logo-badge">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2 2 7l10 5 10-5-10-5Z"></path>
+              <path d="M2 12l10 5 10-5"></path>
+              <path d="M2 17l10 5 10-5"></path>
+            </svg>
+          </span>
+          Smart Classroom
+        </a>
+
         <nav class="main-nav">
           <a href="home.html" class="nav-link">Home</a>
           <a href="dashboard.html" class="nav-link">Dashboard</a>
           <a href="contact.html" class="nav-link">Contact</a>
           <a href="login.html" class="nav-link active">Login</a>
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark theme">Dark Theme</button>
         </nav>
       </div>
     </header>
 
     <main class="page-content">
       <div class="page-shell auth-shell">
-        <section class="panel-card auth-card">
-          <p class="eyebrow">Operator Access</p>
-          <h2>Sign in to continue to the classroom dashboard.</h2>
-          <p class="hero-copy">This is a lightweight demo login with basic validation for presentation use.</p>
-          <form class="login-form" id="loginForm">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="teacher@classroom.ai" required />
+        <section class="auth-layout">
+          <article class="auth-visual reveal-up">
+            <p class="eyebrow" style="color: rgba(255,255,255,0.74);">Secure Access</p>
+            <h2 style="margin: 0; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.04em;">Enter the smart classroom control center.</h2>
+            <p style="margin-top: 16px; max-width: 48ch; color: rgba(255,255,255,0.78);">
+              Sign in to view live classroom conditions, toggle devices, and present your analytics dashboard with confidence.
+            </p>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" minlength="6" placeholder="Enter password" required />
+            <div class="visual-stack">
+              <div class="visual-chip">
+                <div class="feature-icon" style="width: 46px; height: 46px;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                    <path d="M7 8h10"></path>
+                    <path d="M7 12h6"></path>
+                  </svg>
+                </div>
+                <div>
+                  <strong>Live Device Operations</strong>
+                  <span>Monitor fans, lights, and the smart board in one workspace.</span>
+                </div>
+              </div>
 
-            <p id="loginFeedback" class="form-feedback"></p>
-            <button type="submit">Sign In</button>
-          </form>
-          <p class="panel-note">Need access for a project demo? <a href="contact.html">Contact the developer</a>.</p>
+              <div class="visual-chip">
+                <div class="feature-icon" style="width: 46px; height: 46px;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 3v18"></path>
+                    <path d="M5.6 7.5h12.8"></path>
+                    <path d="M7.8 12h8.4"></path>
+                    <path d="M9.6 16.5h4.8"></path>
+                  </svg>
+                </div>
+                <div>
+                  <strong>Sensor-Aware Insights</strong>
+                  <span>Showcase occupancy, light, and temperature responses in real time.</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="auth-card reveal-up" data-delay="1">
+            <p class="eyebrow">Operator Login</p>
+            <h2 style="margin: 0; font-size: 2rem; letter-spacing: -0.04em;">Welcome back</h2>
+            <p class="hero-copy" style="margin-top: 14px;">Use your email and password to continue to the dashboard.</p>
+
+            <form class="form-stack" id="loginForm">
+              <div class="field">
+                <input type="email" id="email" placeholder="Email" required />
+                <label for="email">Email address</label>
+              </div>
+
+              <div class="field password-wrap">
+                <input type="password" id="password" placeholder="Password" minlength="6" required />
+                <label for="password">Password</label>
+                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">Show</button>
+              </div>
+
+              <div class="helper-row">
+                <span>Demo access for classroom presentation and review.</span>
+                <a href="contact.html">Need support?</a>
+              </div>
+
+              <p id="loginFeedback" class="form-feedback"></p>
+              <button type="submit">Login to Dashboard</button>
+            </form>
+          </article>
         </section>
       </div>
     </main>
+
     <script src="script.js"></script>
   </body>
 </html>

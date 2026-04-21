@@ -3,146 +3,258 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Classroom Controller</title>
-    <!-- Google Fonts Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
+    <title>Dashboard | Smart Classroom Automation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="sim.css" />
   </head>
   <body data-page="dashboard" class="sim-page">
+    <div class="page-bg"></div>
+
     <header class="site-header">
       <div class="header-content">
-        <h1 class="logo">Smart Classroom Automation</h1>
+        <a href="home.html" class="logo">
+          <span class="logo-badge">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2 2 7l10 5 10-5-10-5Z"></path>
+              <path d="M2 12l10 5 10-5"></path>
+              <path d="M2 17l10 5 10-5"></path>
+            </svg>
+          </span>
+          Smart Classroom
+        </a>
+
         <nav class="main-nav">
           <a href="home.html" class="nav-link">Home</a>
           <a href="dashboard.html" class="nav-link active">Dashboard</a>
           <a href="contact.html" class="nav-link">Contact</a>
           <a href="login.html" class="nav-link">Login</a>
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark theme">Dark Theme</button>
         </nav>
       </div>
     </header>
 
-    <div class="page-content">
-      <div class="sim-dashboard">
-        <!-- New Top Header -->
-        <header class="sim-header glass-panel">
-          <div class="header-titles">
-            <h1>Smart Classroom System</h1>
-            <p>Live Dashboard Overview</p>
-          </div>
-          <div class="header-metrics">
-            <div class="metric-pill">
-              <span class="pill-label">Temp</span>
-              <strong id="headerTempValue">-- °C</strong>
-            </div>
-            <div class="metric-pill">
-              <span class="pill-label">Active Devices</span>
-              <strong id="headerActiveDevices">0/18</strong>
+    <main class="page-content">
+      <div class="sim-layout">
+        <aside class="sim-sidebar reveal-up">
+          <div class="sidebar-brand">
+            <span class="logo-badge">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+              </svg>
+            </span>
+            <div>
+              <span>Automation Console</span>
+              <strong>Classroom Control</strong>
             </div>
           </div>
-        </header>
 
-        <!-- Main Sections -->
-        <div class="dashboard-grid-layout">
-          
-          <div class="left-column">
-            <!-- Live Classroom Status -->
-            <section class="sim-section status-section glass-panel">
-              <h3>Live Classroom Status</h3>
-              
-              <div class="subsection">
-                <h4>Time & Weather Preset</h4>
-                <div class="btn-group" id="timeOfDayGroup">
-                  <button class="sim-btn" data-time="dawn">Dawn</button>
-                  <button class="sim-btn active" data-time="morning">Morning</button>
-                  <button class="sim-btn" data-time="noon">Noon</button>
-                  <button class="sim-btn" data-time="afternoon">Afternoon</button>
-                  <button class="sim-btn" data-time="evening">Evening</button>
-                  <button class="sim-btn" data-time="night">Night</button>
-                  <button class="sim-btn live-btn" data-time="live" id="liveWeatherBtn">
-                    Live <span id="liveWeatherTemp">--°</span>
-                  </button>
-                </div>
-              </div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link active">
+              <span>Dashboard</span>
+            </a>
+            <a href="contact.html" class="sidebar-link">
+              <span>Contact</span>
+            </a>
+            <a href="login.html" class="sidebar-link" id="logoutLink">
+              <span>Logout</span>
+            </a>
+          </nav>
 
-              <div class="subsection">
-                <h4>Room Scenario</h4>
-                <div class="card-group" id="scenarioGroup">
-                  <button class="scenario-card active" data-scenario="session">Class</button>
-                  <button class="scenario-card" data-scenario="empty">Empty</button>
-                  <button class="scenario-card" data-scenario="exam">Exam</button>
-                  <button class="scenario-card" data-scenario="partial">Partial</button>
-                </div>
-              </div>
-
-              <div class="subsection">
-                <h4>Sensor Inputs</h4>
-                <div class="inputs-card">
-                  <div class="slider-row">
-                    <div class="slider-label-group">
-                      <span class="slider-label">Temperature</span>
-                      <span class="slider-value" id="tempValue">28 °C</span>
-                    </div>
-                    <input type="range" id="tempSlider" min="15" max="40" value="28" step="0.5" />
-                  </div>
-                  <div class="slider-row">
-                    <div class="slider-label-group">
-                      <span class="slider-label">Ambient Light</span>
-                      <span class="slider-value" id="lightValue">420 lx</span>
-                    </div>
-                    <input type="range" id="lightSlider" min="0" max="1000" value="420" step="5" />
-                  </div>
-                  <div class="slider-row">
-                    <div class="slider-label-group">
-                      <span class="slider-label">Motion Detected</span>
-                      <span class="slider-value" id="motionValue">Yes</span>
-                    </div>
-                    <input type="range" id="motionSlider" min="0" max="1" value="1" step="1" />
-                  </div>
-                </div>
-              </div>
-            </section>
+          <div class="sidebar-meta">
+            <p>Current operator</p>
+            <strong id="sidebarUserName">Demo User</strong>
+            <p style="margin-top: 10px;">System status: Live simulation connected.</p>
           </div>
+        </aside>
 
-          <div class="right-column">
-            <!-- Device Control Panel -->
-            <section class="sim-section devices-section glass-panel">
-              <h3>Device Control Panel</h3>
-              <div class="devices-grid" id="devicesContainer">
-                <!-- Devices injected by JS -->
+        <section class="sim-main">
+          <section class="topbar sim-panel reveal-up" data-delay="1">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h1>Premium smart automation dashboard</h1>
+              <p>Monitor the classroom in real time, manage devices instantly, and present energy analytics in a polished control experience.</p>
+            </div>
+
+            <div class="topbar-metrics">
+              <div class="metric-box">
+                <span>Temperature</span>
+                <strong id="headerTempValue">-- deg C</strong>
               </div>
-            </section>
+              <div class="metric-box">
+                <span>Active Devices</span>
+                <strong id="headerActiveDevices">0/18</strong>
+              </div>
+              <div class="metric-box">
+                <span>User</span>
+                <strong id="headerUserName">Demo User</strong>
+              </div>
+            </div>
+          </section>
 
-            <!-- Energy Analytics -->
-            <section class="sim-section energy-section glass-panel">
-              <h3>Energy Analytics</h3>
-              
-              <div class="energy-metrics-row">
-                <div class="metric-card metric-runtime">
-                  <span class="label">Sim Runtime</span>
-                  <strong id="simRuntimeValue" class="value">00:00</strong>
+          <section class="dashboard-grid">
+            <div class="stack">
+              <section class="sim-panel reveal-up" data-delay="2">
+                <div class="panel-header">
+                  <div>
+                    <h2>Live Classroom Status</h2>
+                    <p>Sensor-driven conditions update the room automatically.</p>
+                  </div>
+                  <div class="tag live">Live Status</div>
                 </div>
-                <div class="metric-card metric-saved">
-                  <span class="label">kWh Saved (est.)</span>
-                  <strong id="kwhSavedValue" class="value">0.00</strong>
+
+                <div class="sensor-grid">
+                  <article class="sensor-card">
+                    <span>Temperature</span>
+                    <strong id="statusTempValue">28 deg C</strong>
+                    <div class="sensor-foot">Thermal comfort tracking</div>
+                  </article>
+                  <article class="sensor-card">
+                    <span>Ambient Light</span>
+                    <strong id="statusLightValue">420 lx</strong>
+                    <div class="sensor-foot">Brightness-aware lighting</div>
+                  </article>
+                  <article class="sensor-card">
+                    <span>Motion</span>
+                    <strong id="statusMotionValue">Detected</strong>
+                    <div class="sensor-foot">Occupancy-sensitive control</div>
+                  </article>
                 </div>
-              </div>
 
-              <div class="chart-container">
-                <canvas id="energyChart"></canvas>
-              </div>
-            </section>
-          </div>
+                  <div class="control-blocks">
+                    <div class="subpanel">
+                      <h3>Time and Weather Preset</h3>
+                      <div class="btn-group" id="timeOfDayGroup">
+                      <button class="sim-btn" data-time="dawn">Dawn</button>
+                      <button class="sim-btn active" data-time="morning">Morning</button>
+                      <button class="sim-btn" data-time="noon">Noon</button>
+                      <button class="sim-btn" data-time="afternoon">Afternoon</button>
+                      <button class="sim-btn" data-time="evening">Evening</button>
+                      <button class="sim-btn" data-time="night">Night</button>
+                        <button class="sim-btn live-btn" data-time="live" id="liveWeatherBtn">
+                          Live <span id="liveWeatherTemp">--deg</span>
+                        </button>
+                      </div>
+                      <p class="helper-text" id="locationStatus">Fetching live weather...</p>
+                    </div>
 
-        </div> <!-- grid layout end -->
+                    <div class="subpanel">
+                      <h3>Control Mode</h3>
+                      <div class="mode-toggle" id="modeToggle">
+                        <button class="mode-btn active" id="autoModeBtn" type="button">Auto</button>
+                        <button class="mode-btn" id="manualModeBtn" type="button">Manual</button>
+                      </div>
+                      <p class="helper-text" id="controlModeStatus">Auto mode: devices follow sensor rules.</p>
+                    </div>
+
+                    <div class="subpanel">
+                      <h3>Room Scenario</h3>
+                    <div class="card-group" id="scenarioGroup">
+                      <button class="scenario-card active" data-scenario="session">Class</button>
+                      <button class="scenario-card" data-scenario="empty">Empty</button>
+                      <button class="scenario-card" data-scenario="exam">Exam</button>
+                      <button class="scenario-card" data-scenario="partial">Partial</button>
+                    </div>
+                  </div>
+
+                  <div class="subpanel">
+                    <h3>Sensor Inputs</h3>
+                    <div class="slider-stack">
+                      <div class="slider-row">
+                        <div class="slider-label-group">
+                          <span class="slider-label">Temperature</span>
+                          <span class="slider-value" id="tempValue">28 deg C</span>
+                        </div>
+                        <input type="range" id="tempSlider" min="15" max="40" value="28" step="0.5" />
+                      </div>
+
+                      <div class="slider-row">
+                        <div class="slider-label-group">
+                          <span class="slider-label">Ambient Light</span>
+                          <span class="slider-value" id="lightValue">420 lx</span>
+                        </div>
+                        <input type="range" id="lightSlider" min="0" max="1000" value="420" step="5" />
+                      </div>
+
+                      <div class="slider-row">
+                        <div class="slider-label-group">
+                          <span class="slider-label">Motion Detection</span>
+                          <span class="slider-value" id="motionValue">Yes</span>
+                        </div>
+                        <input type="range" id="motionSlider" min="0" max="1" value="1" step="1" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="stack">
+              <section class="sim-panel reveal-up" data-delay="2">
+                <div class="panel-header">
+                  <div>
+                    <h2>Device Control Panel</h2>
+                    <p>Fans, lights, and smart board states change with clear visual feedback.</p>
+                  </div>
+                  <div class="tag">18 Devices</div>
+                </div>
+                <div class="devices-grid" id="devicesContainer"></div>
+              </section>
+
+              <section class="sim-panel reveal-up" data-delay="3">
+                <div class="panel-header">
+                  <div>
+                    <h2>Energy Dashboard</h2>
+                    <p>Track runtime, savings, and active equipment with smooth updates.</p>
+                  </div>
+                  <div class="tag">Last 8 Days</div>
+                </div>
+
+                <div class="energy-grid">
+                  <article class="metric-box">
+                    <span>Runtime</span>
+                    <strong id="simRuntimeValue">00:00</strong>
+                  </article>
+                  <article class="metric-box">
+                    <span>Energy Saved</span>
+                    <strong id="kwhSavedValue">0.00</strong>
+                  </article>
+                  <article class="metric-box">
+                    <span>Active Count</span>
+                    <strong id="energyActiveDevices">0</strong>
+                  </article>
+                </div>
+
+                <div class="chart-shell">
+                  <canvas id="energyChart"></canvas>
+                </div>
+              </section>
+
+              <section class="activity-card reveal-up" data-delay="3">
+                <div class="panel-header" style="margin-bottom: 10px;">
+                  <div>
+                    <h2>Automation Highlights</h2>
+                    <p>Why the system is useful in a live classroom environment.</p>
+                  </div>
+                </div>
+                <ul>
+                  <li>Turns devices on only when occupancy and environmental thresholds require it.</li>
+                  <li>Improves presentation quality with a clean, modern dashboard-style interface.</li>
+                  <li>Supports project demos with smooth counters, transitions, and responsive layouts.</li>
+                </ul>
+              </section>
+            </div>
+          </section>
+        </section>
       </div>
-    </div>
+    </main>
 
+    <script src="script.js"></script>
     <script src="simulation.js"></script>
   </body>
 </html>
