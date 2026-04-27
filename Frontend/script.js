@@ -51,46 +51,170 @@ function formatUserName(email) {
 }
 
 function bindPasswordToggle() {
-  const passwordInput = byId("password");
-  const toggle = byId("passwordToggle");
-  if (!passwordInput || !toggle) return;
+  const toggles = document.querySelectorAll("[data-password-target]");
+  if (!toggles.length) return;
 
-  toggle.addEventListener("click", () => {
-    const shouldShow = passwordInput.type === "password";
-    passwordInput.type = shouldShow ? "text" : "password";
-    toggle.textContent = shouldShow ? "Hide" : "Show";
-    toggle.setAttribute("aria-label", shouldShow ? "Hide password" : "Show password");
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const targetId = toggle.getAttribute("data-password-target");
+      const passwordInput = targetId ? byId(targetId) : null;
+      if (!passwordInput) return;
+
+      const shouldShow = passwordInput.type === "password";
+      passwordInput.type = shouldShow ? "text" : "password";
+      toggle.textContent = shouldShow ? "Hide" : "Show";
+      toggle.setAttribute("aria-label", shouldShow ? "Hide password" : "Show password");
+    });
   });
 }
 
-function bindLoginForm() {
-  const form = byId("loginForm");
-  if (!form) return;
+function setFeedback(id, message, isError = false) {
+  const feedback = byId(id);
+  if (!feedback) return;
+  feedback.textContent = message;
+  feedback.classList.toggle("is-error", isError);
+}
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const email = byId("email")?.value.trim() || "";
-    const password = byId("password")?.value || "";
-    const feedback = byId("loginFeedback");
+function storeLoggedInUser(user) {
+  localStorage.setItem("smartClassroomUser", user.email);
+  localStorage.setItem("smartClassroomUserName", user.name || formatUserName(user.email));
+}
 
-    if (!email.includes("@")) {
-      if (feedback) feedback.textContent = "Please enter a valid email address.";
-      return;
-    }
-
-    if (password.length < 6) {
-      if (feedback) feedback.textContent = "Password must be at least 6 characters.";
-      return;
-    }
-
-    localStorage.setItem("smartClassroomUser", email);
-    localStorage.setItem("smartClassroomUserName", formatUserName(email));
-
-    if (feedback) feedback.textContent = "Login successful. Redirecting to dashboard...";
-    window.setTimeout(() => {
-      window.location.href = "dashboard.html";
-    }, 700);
+async function postJson(url, payload) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || "Request failed.");
+  }
+
+  return data;
+}
+
+function bindAuthTabs() {
+  const tabs = document.querySelectorAll("[data-auth-tab]");
+  const loginForm = byId("loginForm");
+  const signupForm = byId("signupForm");
+  const authEyebrow = byId("authEyebrow");
+  const authTitle = byId("authTitle");
+  const authDescription = byId("authDescription");
+  if (!tabs.length || !loginForm || !signupForm) return;
+
+  const updateAuthCopy = (showLogin) => {
+    if (authEyebrow) {
+      authEyebrow.textContent = showLogin ? "Log In" : "Sign Up";
+    }
+
+    if (authTitle) {
+      authTitle.textContent = showLogin ? "Welcome back" : "Create your account";
+    }
+
+    if (authDescription) {
+      authDescription.textContent = showLogin
+        ? "Log in to continue to the dashboard."
+        : "Create your account to continue to the dashboard.";
+    }
+  };
+
+  updateAuthCopy(true);
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const mode = tab.getAttribute("data-auth-tab");
+      const showLogin = mode === "login";
+      loginForm.hidden = !showLogin;
+      signupForm.hidden = showLogin;
+      loginForm.classList.toggle("active", showLogin);
+      signupForm.classList.toggle("active", !showLogin);
+
+      tabs.forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("active", isActive);
+        item.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      updateAuthCopy(showLogin);
+    });
+  });
+}
+
+function bindAuthForms() {
+  const loginForm = byId("loginForm");
+  const signupForm = byId("signupForm");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = byId("loginEmail")?.value.trim() || "";
+      const password = byId("loginPassword")?.value || "";
+
+      if (!email.includes("@")) {
+        setFeedback("loginFeedback", "Please enter a valid email address.", true);
+        return;
+      }
+
+      if (password.length < 6) {
+        setFeedback("loginFeedback", "Password must be at least 6 characters.", true);
+        return;
+      }
+
+      setFeedback("loginFeedback", "Checking your account...");
+
+      try {
+        const result = await postJson("/api/auth/login", { email, password });
+        storeLoggedInUser(result.user);
+        setFeedback("loginFeedback", "Login successful. Redirecting to dashboard...");
+        window.setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 700);
+      } catch (error) {
+        setFeedback("loginFeedback", error.message, true);
+      }
+    });
+  }
+
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const name = byId("signupName")?.value.trim() || "";
+      const email = byId("signupEmail")?.value.trim() || "";
+      const password = byId("signupPassword")?.value || "";
+
+      if (!name || !email || !password) {
+        setFeedback("signupFeedback", "Please fill in all fields.", true);
+        return;
+      }
+
+      if (!email.includes("@")) {
+        setFeedback("signupFeedback", "Please enter a valid email address.", true);
+        return;
+      }
+
+      if (password.length < 6) {
+        setFeedback("signupFeedback", "Password must be at least 6 characters.", true);
+        return;
+      }
+
+      setFeedback("signupFeedback", "Creating your account...");
+
+      try {
+        const result = await postJson("/api/auth/signup", { name, email, password });
+        storeLoggedInUser(result.user);
+        setFeedback("signupFeedback", "Account created. Redirecting to dashboard...");
+        window.setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 700);
+      } catch (error) {
+        setFeedback("signupFeedback", error.message, true);
+      }
+    });
+  }
 }
 
 function bindContactForm() {
@@ -122,6 +246,7 @@ function bindContactForm() {
 document.addEventListener("DOMContentLoaded", () => {
   bindThemeToggle();
   bindPasswordToggle();
-  bindLoginForm();
+  bindAuthTabs();
+  bindAuthForms();
   bindContactForm();
 });

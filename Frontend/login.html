@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login | Smart Classroom Automation</title>
+    <title>Login / Sign Up | Smart Classroom Automation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -29,7 +29,7 @@
           <a href="home.html" class="nav-link">Home</a>
           <a href="dashboard.html" class="nav-link">Dashboard</a>
           <a href="contact.html" class="nav-link">Contact</a>
-          <a href="login.html" class="nav-link active">Login</a>
+          <a href="login.html" class="nav-link active">Login / Sign Up</a>
           <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark theme">Dark Theme</button>
         </nav>
       </div>
@@ -78,29 +78,55 @@
           </article>
 
           <article class="auth-card reveal-up" data-delay="1">
-            <p class="eyebrow">Operator Login</p>
-            <h2 style="margin: 0; font-size: 2rem; letter-spacing: -0.04em;">Welcome back</h2>
-            <p class="hero-copy" style="margin-top: 14px;">Use your email and password to continue to the dashboard.</p>
+            <p class="eyebrow" id="authEyebrow">Log In</p>
+            <h2 id="authTitle" style="margin: 0; font-size: 2rem; letter-spacing: -0.04em;">Welcome back</h2>
+            <p class="hero-copy" id="authDescription" style="margin-top: 14px;">Log in to continue to the dashboard.</p>
 
-            <form class="form-stack" id="loginForm">
+            <div class="auth-tabs" role="tablist" aria-label="Authentication forms">
+              <button type="button" class="auth-tab active" id="loginTab" data-auth-tab="login" aria-selected="true">Log In</button>
+              <button type="button" class="auth-tab" id="signupTab" data-auth-tab="signup" aria-selected="false">Sign Up</button>
+            </div>
+
+            <form class="form-stack auth-form-panel active" id="loginForm">
               <div class="field">
-                <input type="email" id="email" placeholder="Email" required />
-                <label for="email">Email address</label>
+                <input type="email" id="loginEmail" placeholder="Email" required />
+                <label for="loginEmail">Email address</label>
               </div>
 
               <div class="field password-wrap">
-                <input type="password" id="password" placeholder="Password" minlength="6" required />
-                <label for="password">Password</label>
-                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">Show</button>
+                <input type="password" id="loginPassword" placeholder="Password" minlength="6" required />
+                <label for="loginPassword">Password</label>
+                <button type="button" class="password-toggle" data-password-target="loginPassword" aria-label="Show password">Show</button>
               </div>
 
               <div class="helper-row">
-                <span>Demo access for classroom presentation and review.</span>
+                <span>Use your registered account to open the dashboard.</span>
                 <a href="contact.html">Need support?</a>
               </div>
 
               <p id="loginFeedback" class="form-feedback"></p>
-              <button type="submit">Login to Dashboard</button>
+              <button type="submit">Log In</button>
+            </form>
+
+            <form class="form-stack auth-form-panel" id="signupForm" hidden>
+              <div class="field">
+                <input type="text" id="signupName" placeholder="Full name" required />
+                <label for="signupName">Full name</label>
+              </div>
+
+              <div class="field">
+                <input type="email" id="signupEmail" placeholder="Email" required />
+                <label for="signupEmail">Email address</label>
+              </div>
+
+              <div class="field password-wrap">
+                <input type="password" id="signupPassword" placeholder="Password" minlength="6" required />
+                <label for="signupPassword">Password</label>
+                <button type="button" class="password-toggle" data-password-target="signupPassword" aria-label="Show password">Show</button>
+              </div>
+
+              <p id="signupFeedback" class="form-feedback"></p>
+              <button type="submit">Create Account</button>
             </form>
           </article>
         </section>

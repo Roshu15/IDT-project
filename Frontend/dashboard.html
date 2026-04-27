@@ -153,6 +153,24 @@
                     </div>
 
                     <div class="subpanel">
+                      <h3>Fan Speed Controller</h3>
+                      <div class="slider-stack">
+                        <div class="slider-row fan-speed-row">
+                          <div class="slider-label-group">
+                            <span class="slider-label">Fan Speed</span>
+                            <span class="slider-value" id="fanSpeedValue">0%</span>
+                          </div>
+                          <input type="range" id="fanSpeedSlider" min="0" max="100" value="0" step="5" />
+                          <div class="fan-speed-meta">
+                            <span id="fanSpeedModeLabel">Auto adjusts from temperature.</span>
+                            <strong id="fanSpeedStage">OFF</strong>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="helper-text" id="fanSpeedStatus">Auto mode: higher classroom temperature increases fan speed.</p>
+                    </div>
+
+                    <div class="subpanel">
                       <h3>Room Scenario</h3>
                     <div class="card-group" id="scenarioGroup">
                       <button class="scenario-card active" data-scenario="session">Class</button>
@@ -210,7 +228,7 @@
                 <div class="panel-header">
                   <div>
                     <h2>Energy Dashboard</h2>
-                    <p>Track runtime, savings, and active equipment with smooth updates.</p>
+                    <p>Review the last 8 days of energy consumption based on classroom temperature and active systems.</p>
                   </div>
                   <div class="tag">Last 8 Days</div>
                 </div>

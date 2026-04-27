@@ -13,10 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const tempSlider = byId("tempSlider");
   const lightSlider = byId("lightSlider");
   const motionSlider = byId("motionSlider");
+  const fanSpeedSlider = byId("fanSpeedSlider");
 
   const tempValue = byId("tempValue");
   const lightValue = byId("lightValue");
   const motionValue = byId("motionValue");
+  const fanSpeedValue = byId("fanSpeedValue");
+  const fanSpeedStatus = byId("fanSpeedStatus");
+  const fanSpeedModeLabel = byId("fanSpeedModeLabel");
+  const fanSpeedStage = byId("fanSpeedStage");
   const statusTempValue = byId("statusTempValue");
   const statusLightValue = byId("statusLightValue");
   const statusMotionValue = byId("statusMotionValue");
@@ -37,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let activeRelaysCount = 0;
   let chartInstance = null;
   let controlMode = "auto";
+  let fanSpeedPercent = 0;
 
   const thresholds = {
     light: 500,
@@ -67,6 +73,17 @@ document.addEventListener("DOMContentLoaded", () => {
     night: { light: 0, temp: 25 },
     live: { light: 600, temp: 25 }
   };
+
+  const energyHistorySeed = [
+    { temp: 26, activeSystems: 8 },
+    { temp: 27.5, activeSystems: 9 },
+    { temp: 30, activeSystems: 12 },
+    { temp: 32, activeSystems: 14 },
+    { temp: 29, activeSystems: 11 },
+    { temp: 33.5, activeSystems: 15 },
+    { temp: 34.5, activeSystems: 16 },
+    { temp: 36, activeSystems: 17 }
+  ];
 
   function getStoredUserName() {
     return localStorage.getItem("smartClassroomUserName") || "Demo User";
@@ -113,6 +130,56 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${Number(value).toFixed(1)} deg C`;
   }
 
+  function getFanSpeedStage(percent) {
+    if (percent <= 0) return { level: 0, label: "OFF" };
+    if (percent <= 25) return { level: 1, label: "LOW" };
+    if (percent <= 50) return { level: 2, label: "MEDIUM" };
+    if (percent <= 75) return { level: 3, label: "HIGH" };
+    return { level: 4, label: "MAX" };
+  }
+
+  function calculateAutoFanSpeed(temp) {
+    if (temp < 24) return 0;
+    if (temp < 27) return 25;
+    if (temp < 30) return 45;
+    if (temp < 33) return 65;
+    if (temp < 36) return 85;
+    return 100;
+  }
+
+  function setFanSpeed(percent, source = controlMode) {
+    fanSpeedPercent = Math.max(0, Math.min(100, Number(percent) || 0));
+    const stage = getFanSpeedStage(fanSpeedPercent);
+
+    if (fanSpeedSlider) {
+      fanSpeedSlider.value = String(fanSpeedPercent);
+      fanSpeedSlider.disabled = source === "auto";
+      updateTrackFill(fanSpeedSlider);
+    }
+
+    if (fanSpeedValue) fanSpeedValue.textContent = `${fanSpeedPercent}%`;
+    if (fanSpeedStage) fanSpeedStage.textContent = stage.label;
+    if (fanSpeedModeLabel) {
+      fanSpeedModeLabel.textContent =
+        source === "manual"
+          ? "Manual speed is applied to all active fans."
+          : "Auto adjusts from temperature.";
+    }
+    if (fanSpeedStatus) {
+      fanSpeedStatus.textContent =
+        source === "manual"
+          ? `Manual mode: fan speed is fixed at ${fanSpeedPercent}%.`
+          : `Auto mode: temperature is setting fan speed to ${fanSpeedPercent}%.`;
+    }
+
+    devices
+      .filter((device) => device.type === "fan")
+      .forEach((device) => {
+        const card = byId(`card-${device.id}`);
+        if (card) card.dataset.fanSpeed = String(stage.level);
+      });
+  }
+
   function renderDevices() {
     if (!devicesContainer) return;
     devicesContainer.innerHTML = "";
@@ -154,7 +221,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!card || !stateLabel) return;
 
     card.classList.toggle("on", device.state);
-    stateLabel.textContent = device.state ? "ON" : "OFF";
+    if (device.type === "fan" && device.state) {
+      stateLabel.textContent = `${getFanSpeedStage(fanSpeedPercent).label}`;
+    } else {
+      stateLabel.textContent = device.state ? "ON" : "OFF";
+    }
   }
 
   function refreshActiveDeviceCounters() {
@@ -199,9 +270,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     syncManualInteractivity();
     if (mode === "auto") {
+      setFanSpeed(calculateAutoFanSpeed(parseFloat(tempSlider.value)), "auto");
       evaluateRelays();
     } else {
+      setFanSpeed(fanSpeedPercent, "manual");
       refreshActiveDeviceCounters();
+      devices.filter((device) => device.type === "fan").forEach(updateRelayUI);
     }
   }
 
@@ -215,6 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const light = parseInt(lightSlider.value, 10);
     const motion = parseInt(motionSlider.value, 10) === 1;
     const activeScenario = document.querySelector(".scenario-card.active")?.dataset.scenario || "session";
+
+    setFanSpeed(calculateAutoFanSpeed(temp), "auto");
 
     activeRelaysCount = 0;
 
@@ -328,6 +404,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setLocationStatus(message) {
     if (locationStatus) locationStatus.textContent = message;
+  }
+
+  function formatShortDate(date) {
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
+
+  function buildEnergyHistory() {
+    const today = new Date();
+
+    return energyHistorySeed.map((entry, index) => {
+      const day = new Date(today);
+      day.setDate(today.getDate() - (energyHistorySeed.length - 1 - index));
+
+      const consumption =
+        2.8 + (entry.temp - 20) * 0.18 + entry.activeSystems * 0.32;
+
+      return {
+        label: formatShortDate(day),
+        temp: entry.temp,
+        activeSystems: entry.activeSystems,
+        consumption: Number(consumption.toFixed(1))
+      };
+    });
   }
 
   function applyLiveWeather(temperature, isDay) {
@@ -523,6 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderChart() {
     const canvas = byId("energyChart");
     if (!canvas || typeof Chart === "undefined") return;
+    const energyHistory = buildEnergyHistory();
 
     if (chartInstance) {
       chartInstance.destroy();
@@ -531,19 +631,31 @@ document.addEventListener("DOMContentLoaded", () => {
     chartInstance = new Chart(canvas, {
       type: "line",
       data: {
-        labels: ["Apr 13", "Apr 14", "Apr 15", "Apr 16", "Apr 17", "Apr 18", "Apr 19", "Apr 20"],
+        labels: energyHistory.map((entry) => entry.label),
         datasets: [
           {
-            label: "Energy Saved",
-            data: [8.4, 9.1, 10.8, 11.6, 10.9, 12.7, 13.4, 14.2],
+            label: "Energy Consumption",
+            data: energyHistory.map((entry) => entry.consumption),
             borderColor: "#2563eb",
             backgroundColor: "rgba(37, 99, 235, 0.12)",
             fill: true,
             tension: 0.38,
             borderWidth: 3,
-            pointRadius: 0,
+            pointRadius: 3,
             pointHoverRadius: 5,
-            pointBackgroundColor: "#16a34a"
+            pointBackgroundColor: "#16a34a",
+            yAxisID: "y"
+          },
+          {
+            type: "bar",
+            label: "Active Systems",
+            data: energyHistory.map((entry) => entry.activeSystems),
+            backgroundColor: "rgba(124, 58, 237, 0.22)",
+            borderColor: "rgba(124, 58, 237, 0.8)",
+            borderWidth: 1,
+            borderRadius: 10,
+            maxBarThickness: 22,
+            yAxisID: "y1"
           }
         ]
       },
@@ -553,14 +665,25 @@ document.addEventListener("DOMContentLoaded", () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            displayColors: false,
+            displayColors: true,
             padding: 12,
             backgroundColor: "#0f172a",
             bodyFont: { family: "Poppins", weight: "600" },
             titleFont: { family: "Poppins", weight: "600" },
             callbacks: {
+              title(items) {
+                return items[0]?.label || "";
+              },
               label(context) {
-                return `${context.parsed.y} kWh saved`;
+                if (context.dataset.label === "Energy Consumption") {
+                  return `${context.parsed.y} kWh consumed`;
+                }
+                return `${context.parsed.y} systems active`;
+              },
+              afterBody(items) {
+                const index = items[0]?.dataIndex ?? 0;
+                const entry = energyHistory[index];
+                return [`Temperature: ${entry.temp} deg C`];
               }
             }
           }
@@ -571,14 +694,36 @@ document.addEventListener("DOMContentLoaded", () => {
             ticks: { color: "#64748b", font: { family: "Poppins" } }
           },
           y: {
-            beginAtZero: false,
+            beginAtZero: true,
             grid: { color: "rgba(148, 163, 184, 0.16)" },
+            title: {
+              display: true,
+              text: "Energy Consumption",
+              color: "#64748b",
+              font: { family: "Poppins", weight: "600" }
+            },
             ticks: {
               color: "#64748b",
               font: { family: "Poppins" },
               callback(value) {
                 return `${value} kWh`;
               }
+            }
+          },
+          y1: {
+            beginAtZero: true,
+            position: "right",
+            grid: { drawOnChartArea: false },
+            title: {
+              display: true,
+              text: "Active Systems",
+              color: "#64748b",
+              font: { family: "Poppins", weight: "600" }
+            },
+            ticks: {
+              color: "#64748b",
+              stepSize: 2,
+              font: { family: "Poppins" }
             }
           }
         },
@@ -607,6 +752,19 @@ document.addEventListener("DOMContentLoaded", () => {
     [tempSlider, lightSlider, motionSlider].forEach((slider) => {
       slider.addEventListener("input", updateSliderValues);
     });
+
+    if (fanSpeedSlider) {
+      fanSpeedSlider.addEventListener("input", () => {
+        if (controlMode !== "manual") {
+          setFanSpeed(calculateAutoFanSpeed(parseFloat(tempSlider.value)), "auto");
+          return;
+        }
+        setFanSpeed(parseInt(fanSpeedSlider.value, 10), "manual");
+        devices
+          .filter((device) => device.type === "fan" && device.state)
+          .forEach(updateRelayUI);
+      });
+    }
   }
 
   setUserContext();
